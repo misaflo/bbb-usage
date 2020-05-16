@@ -2,3 +2,5 @@
 composer.lock
 conf.php
 tmp/
+/nbproject/private/
+/vendor/
