@@ -7,6 +7,7 @@ require_once 'lib.php';
 
 date_default_timezone_set($timezone);
 
+
 $data = getCurrentData();
 
 $day = date('Y-m-d');
@@ -38,6 +39,7 @@ if ($db_name != "")
                     ts TIMESTAMP NOT NULL,
                     server_count SMALLINT,
                     server VARCHAR(255),
+                    server_phys VARCHAR(255),
                     meeting_count SMALLINT UNSIGNED,
                     participant_count SMALLINT UNSIGNED,
                     voice_participant_count SMALLINT UNSIGNED,                                        
@@ -70,9 +72,11 @@ if ($db_name != "")
             $vpc = $stats['voice_participant_count'];
             $vc = $stats['video_count'];
             $bc = $stats['breakout_count'];
+            $bc = $stats['breakout_count'];
+            $server_phys = $stats['server_phys'];
 
-            $sql = "INSERT INTO bbb_usage_data (ts, server_count, server, meeting_count, participant_count, voice_participant_count, video_count, breakout_count)
-                VALUES ('$timestamp', $server_count, '$server', $mc, $pc, $vpc, $vc, $bc)";
+            $sql = "INSERT INTO bbb_usage_data (ts, server_count, server, server_phys, meeting_count, participant_count, voice_participant_count, video_count, breakout_count)
+                VALUES ('$timestamp', $server_count, '$server', '$server_phys', $mc, $pc, $vpc, $vc, $bc)";
 
             $ressql = $conn->query($sql);
         }

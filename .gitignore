@@ -1,6 +1,7 @@
 .idea
 composer.lock
 conf.php
+servers.yml
 tmp/
-/nbproject/private/
+nbproject/
 /vendor/

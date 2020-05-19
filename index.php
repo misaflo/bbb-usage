@@ -55,7 +55,7 @@ if ($secret_input != "") {
         }
 
     } else {
-        print "nope";
+        echo "nope";
         exit;
     }
 
@@ -124,7 +124,7 @@ if ($secret_input != "") {
 
                     $row++;
 
-                    if ($last_row_was_0)
+                    if (($last_row_was_0) && ($last_ts != 0))
                     {
                         foreach ($title as $stat => $value) {
                             $gdata [$stat][$row][0] = 'new Date(' . ($last_ts * 1000) . ')';
@@ -174,27 +174,28 @@ if ($secret_input != "") {
             }
         }
     }
-
-
-    print '<html><head>';
-    print '<link rel="stylesheet" type="text/css" href="main.css">';
-    print '<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>';
-
-    print '<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />';
-    //print '<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js" rel="stylesheet" />';
-    print '<link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />';
-    //print '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>';
-    print '<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>';
-    print '<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>';
-    //print '<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js"></script>';
-
-    print '<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>';
-
+?>
+<!doctype html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.full.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<?php
     $nodata = false;
 
     $script = "<script>\n";
 
     if (!empty($gdata)) {
+        
+        
         foreach ($gdata as $key => $stat) {
 
             $script .= "google.charts.load('current', {packages: ['corechart', 'line']}); \n";
@@ -214,7 +215,7 @@ if ($secret_input != "") {
             $stat = array_values($stat);
             $js_gdata = json_encode($stat);
             $js_gdata = str_replace('"', '', $js_gdata);
-
+            
             $script .= "data.addRows(" . $js_gdata . "); \n";
 
             //'#CB4335', '#2471A3', '#138D75', '#D4AC0D', '#2E4053'        colors: ['#10a513', '#097138'],
@@ -241,145 +242,130 @@ if ($secret_input != "") {
 
 
     $script .= "</script>";
+?>
+    <?=$script;?>
 
-    print $script;
+    </head>
 
+    <body>
+        <h2>Usage statistics for <?php echo ($showall ? $servername : $show_server);?></h2>
 
-    print '</head>';
-
-    print "<body>";
-
-
-    print "<h2>Usage statistics for " . ($showall ? $servername : $show_server) . "</h2>";
-
-
+<?php
     $currdata = getCurrentData($show_server);
+?>
+        <div id="divcurrdata">
 
-    print '<div id="divcurrdata">';
-
+<?php
     if (!empty ($currdata)) {
-        print '<br><table id="currdata">';
+?>
+        <br>
+            <table id="currdata">
+                <tr>
+                    <th>Current data</th>
+<?php foreach ($title as $text) { ?>
+                    <th><?=$text;?></th>
+<?php } ?>
+                </tr>
+<?php foreach ($currdata as $key => $stat) { ?>
 
-        print "<tr>";
-        print "<th>Current data</th>";
+            <tr>
+                <td><?=$key;?></td>
+            <?php foreach ($stat as $value) {  ?>
+                <td><?=$value;?></td>
+<?php                } ?>
+            </tr>
+<?php        } ?>
 
-        foreach ($title as $text) {
-            print "<th>$text</th>";
-        }
-        print "</tr>";
-
-        foreach ($currdata as $key => $stat) {
-
-            print "<tr>";
-            print "<td>";
-            print $key;
-            print "</td>";
-
-            foreach ($stat as $value) {
-                print "<td>";
-                print $value;
-                print "</td>";
-            }
-            print "</tr>";
-        }
-
-        print "</table><br>";
-    } else {
-        print '<p id="nomeetings">Currently no active meetings</p><br><br>';
-    }
+            </table>
+        <br>
+<?php    } else { ?>
+        <p id="nomeetings">Currently no active meetings</p>
+        <br>
+        <br>
+<?php } ?>
 
 
-    print '<form method="get" name="form" action="index.php">';
-
-    print '<input type="hidden" name="secret" value="' . $secret_input . '">';
-
-    //print '<div class="sel">';
-
-    print "<table>";
-
-    print '<tr>';
-
-    if ($showall)
-    {
-        print "<td>";
-
-        print '<select id="selectserver" name="selectserver[]" multiple="multiple">';
-
+    <form method="get" name="form" action="index.php">
+        <input type="hidden" name="secret" value="<?=$secret_input;?>">
+            <div class="sel">
+                <table>
+                    <tr>
+<?php if ($showall) { ?>
+                        <td>
+                            <select id="selectserver" name="selectserver[]" multiple="multiple">
+<?PHP
         foreach ($allservers as $key => $server) {
             if (!empty ($selserver)) {
-                print '<option value="' . $server . '"';
-                if (array_search($server, $selserver) !== false) {
-                    print " selected";
-                }
-                print '>' . $server . '</option>';
-            } else {
-                print '<option value="' . $server . '" selected>' . $server . '</option>';
-            }
+?>
+                                <option value="<?=$server;?>"
+<?php if (array_search($server, $selserver) !== false) { ?>
+                    " selected"
+<?php                } ?>
+                ><?=$server;?></option>
+<?php            } else { ?>
+                                <option value="<?=$server;?>" selected><?=$server;?></option>
+<?php            }
         }
+?>
 
+                        </select>
 
-        print '</select>';
+                    </td>
+    <?php }?>
 
-        print "</td>";
-    }
+                    <td  class="sel">
+                        <p>Start Date: <input type="text" id="datepicker" name="startdate" value="<?=$startdate_str;?>"></p>
+                    </td>
 
-    print '<td  class="sel">';
-    print '<p>Start Date: <input type="text" id="datepicker" name="startdate" value="' . $startdate_str . '"></p>';
-    print "</td>";
+                    <td  class="sel">
+                        <p>End Date: <input type="text" id="datepicker1" name="enddate" value="<?=$enddate_str;?>"></p>
+                    </td>
 
-    print '<td  class="sel">';
-    print '<p>End Date: <input type="text" id="datepicker1" name="enddate" value="' . $enddate_str . '"></p>';
-    print "</td>";
+                    <td>
+                        <input id="but" type="submit" value="Submit">
+                    </td>
 
-    print '<td>';
-    print '<input id="but" type="submit" value="Submit">';
-    print "</td>";
+                </tr>
 
-    print "</tr>";
+            </table>
+        </div>
+    </form>
 
-    print "</table>";
+    <script>
+        $('#selectserver').select2({ placeholder: 'Select servers' });
+        $('input#datepicker').datepicker({dateFormat: 'yy-mm-dd'})
+        $('input#datepicker1').datepicker({dateFormat: 'yy-mm-dd'})
+    </script>
 
-    print "</div>";
-
-
-    print '</form>';
-
-    print "<script>$('#selectserver').select2({ placeholder: 'Select servers' });</script>";
-
-    print "<script>$('input#datepicker').datepicker({dateFormat: 'yy-mm-dd'})</script>";
-
-    print "<script>$('input#datepicker1').datepicker({dateFormat: 'yy-mm-dd'})</script>";
-
-
+<?php
     foreach ($title as $key => $stat) {
+?>
+        <div id="chart_<?=$key;?>"></div>
 
-        print '<div id="chart_' . $key . '"></div>';
+<?php    } ?>
 
-    }
+<?php echo ($nodata)?'<br><p id="nomeetings">No data</p>':''; ?>
+        </div>
+    </body>
+</html>
 
-    if ($nodata) print '<br><p id="nomeetings">No data</p>';
-
-
-    print "</body></html>";
-
-
+<?php
 }
 else
 {
-    print '<html><head>';
-    print '<link rel="stylesheet" type="text/css" href="main.css">';
-    print "</head>";
-    print "<body style='background-color: darkgray'>";
-
-
-    print "<form>";
-
-    print '<input type="text" id="secret" name="secret" placeholder="Please enter the secret">';
-    print '<input type="submit" id ="hidden" value="OK">';
-
-
-    print "</form>";
-
-    print "</body>";
+?>
+<!doctype html>
+    <html>
+        <head>
+            <link rel="stylesheet" type="text/css" href="main.css">
+        </head>";
+        <body style='background-color: darkgray'>
+            <form>
+                <input type="text" id="secret" name="secret" placeholder="Please enter the secret">
+                <input type="submit" id ="hidden" value="OK">
+            </form>
+        </body>
+    </html>
+    <?php
 }
-
+?>
