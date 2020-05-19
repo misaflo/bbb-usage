@@ -1,0 +1,7 @@
+servers:
+    server1:
+        bbb_secret: ~
+        servername: ~
+    campus2:
+        bbb_secret: ~
+        servername: ~
