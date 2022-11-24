@@ -358,7 +358,7 @@ else
     <html>
         <head>
             <link rel="stylesheet" type="text/css" href="main.css">
-        </head>";
+        </head>
         <body style='background-color: darkgray'>
             <form>
                 <input type="text" id="secret" name="secret" placeholder="Please enter the secret">
