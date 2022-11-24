@@ -36,6 +36,11 @@ You can install bbb-usage on the BBB server or on a different server.
 - Webserver (eg Apache, NGINX)
 - PHP 7.2 (or above)
 - mySQL Server
+- composer
+
+Example on Debian:
+
+    apt install git apache2 mariadb-server libapache2-mod-php php-yaml php-mysql php-curl php-xml php-mbstring composer
 
 ### Installation steps
 
@@ -43,8 +48,9 @@ You can install bbb-usage on the BBB server or on a different server.
 
 Let's assume `/var/www/html/` is the root directory of your webserver:
 
-`cd /var/www/html/`
-`git clone https://github.com/glu000/bbb-usage`
+    cd /var/www/html/
+    git clone https://github.com/misaflo/bbb-usage
+    composer update # install bigbluebutton-api-php
 
 #### 2. Create mySQL database
 
