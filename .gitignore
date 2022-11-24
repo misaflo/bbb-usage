@@ -4,4 +4,4 @@ conf.php
 servers.yml
 tmp/
 nbproject/
-/vendor/
+vendor/
