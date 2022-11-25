@@ -176,13 +176,14 @@ if ($secret_input != "") {
     }
 ?>
 <!doctype html>
-<html>
+<html lang="en">
     <head>
+        <title>bbb-usage</title>
         <link rel="stylesheet" type="text/css" href="main.css">
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" />
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -252,6 +253,9 @@ if ($secret_input != "") {
 
 <?php
     $currdata = getCurrentData($show_server);
+    foreach ($currdata as &$srv) {
+        unset($srv["server_phys"]); // delete the 7th column (array of 6 columns)
+    }
 ?>
         <div id="divcurrdata">
 
@@ -279,7 +283,7 @@ if ($secret_input != "") {
             </table>
         <br>
 <?php    } else { ?>
-        <p id="nomeetings">Currently no active meetings</p>
+        <p class="nomeetings">Currently no active meetings</p>
         <br>
         <br>
 <?php } ?>
@@ -344,7 +348,7 @@ if ($secret_input != "") {
 
 <?php    } ?>
 
-<?php echo ($nodata)?'<br><p id="nomeetings">No data</p>':''; ?>
+<?php echo ($nodata)?'<br><p class="nomeetings">No data</p>':''; ?>
         </div>
     </body>
 </html>
@@ -355,8 +359,9 @@ else
 {
 ?>
 <!doctype html>
-    <html>
+    <html lang="en">
         <head>
+            <title>bbb-usage</title>
             <link rel="stylesheet" type="text/css" href="main.css">
         </head>
         <body style='background-color: darkgray'>
